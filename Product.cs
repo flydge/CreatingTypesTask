@@ -8,16 +8,8 @@ namespace CreatingTypesTask
         private string _productName;
         private string _productDescription;
 
-        public Product()
-        {
-        }
-
-        public Product(string productName)
-        {
-            _productName = productName;
-        }
-
-        public Product(int productPrice, string productName, string productDescription)
+       
+        public Product(int productPrice = 0, string productName = "Simple name", string productDescription = "Simple Description")
         {
             _productPrice = productPrice;
             _productName = productName;
