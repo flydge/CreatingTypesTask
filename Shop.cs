@@ -7,33 +7,45 @@ namespace CreatingTypesTask
     public class Shop
     {
         private Order _order;
-        private bool _foodCheck;
+        private List<Order> _ordersList;
+      
         
 
-        public Shop(Order order)
+        public Shop(params Order[] order)
         {
-            _order = order;
-            ProductCheck();
+            _ordersList = new List<Order>();
+            foreach (var ord in order)
+            {
+                _order = ord;
+
+                for (int i = 0; i < _order.ProductsList.Count; i++)
+                {
+                    var product = _order.ProductsList[i];
+                    ProductCheck(product.ProductName, i);
+                }
+               
+                _ordersList.Add(_order);
+            }
         }
        
         public Order Order => _order;
 
 
-        void ProductCheck()
+        void ProductCheck(string productName, int productPosition)
         {
-            _foodCheck = false;
             int enumPosition = 0;
-            
+          
             foreach (var enumProductName in Enum.GetNames(typeof(EnumProducts)))
             {
-               
-                if (String.Equals(enumProductName,_order.Product.ProductName,StringComparison.OrdinalIgnoreCase))
+                
+                if (String.Equals(enumProductName, productName, StringComparison.OrdinalIgnoreCase))
                 {
-                    _foodCheck = true;
-                    ProductsSwitch(enumPosition);
+                    ProductsSwitch(enumPosition, productPosition);
+                   
+                    break;
                 }
+                    
                 enumPosition++;
-               
             }
             
         }
@@ -44,29 +56,29 @@ namespace CreatingTypesTask
             Fish,Meat,Bread
         }
 
-        void ProductsSwitch(int enumPosition )
+        void ProductsSwitch(int enumPosition, int productPosition )
         {
             switch ((EnumProducts)enumPosition)
             {
                 case EnumProducts.Bread:
                 {
-                    _order.Product.ProductDescription =
+                    _order.ProductsList[productPosition].ProductDescription =
                         "Bread is a staple food prepared from a dough of flour and water, usually by baking. ";
-                    _order.Product.ProductPrice = 132;
+                    _order.ProductsList[productPosition].ProductPrice = 132;
                     break;
                 }
                 case EnumProducts.Fish:
                 {
-                    _order.Product.ProductDescription =
+                    _order.ProductsList[productPosition].ProductDescription =
                         "Fish are the gill-bearing aquatic craniate animals that lack limbs with digits. ";
-                    _order.Product.ProductPrice = 400;
+                    _order.ProductsList[productPosition].ProductPrice = 400;
                     break;
                     
                 }
                 case EnumProducts.Meat:
                 {
-                    _order.Product.ProductDescription = "Meat is animal flesh that is eaten as food.";
-                    _order.Product.ProductPrice = 350;
+                    _order.ProductsList[productPosition].ProductDescription = "Meat is animal flesh that is eaten as food.";
+                    _order.ProductsList[productPosition].ProductPrice = 350;
                     break;
                     
                 }
@@ -74,22 +86,19 @@ namespace CreatingTypesTask
                 default: throw new InvalidOperationException("Product is not available");
             }
         }
-
+       
 
         public override string ToString()
         {
-
-            string val;
-                if (_foodCheck)
-                {
-                    val = "Order acepted"+"\n"+Order;
-                }
-                else
-                {
-                    val = "Product not found";
-                }
+            string val = "";
+            
+            foreach (var order in _ordersList)
+            {
                 
-                return String.Format(val);
+                val +="\nOrder acepted:"+"\n"+order+"\n";
+
+            }
+            return val;
         }
     }
     

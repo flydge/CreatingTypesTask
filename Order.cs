@@ -1,22 +1,34 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace CreatingTypesTask
 {
     public class Order
     {
-        private static int _orderNumb;
         private Customer _customer;
-        private Product _product;
         private DateTime _orderDateTime;
         private DateTime _deliveryDateTime;
+        private List<Product> _productsList;
 
-        public Order(Customer customer, Product product, DateTime deliveryDateTime)
+        public Order(Customer customer, DateTime deliveryDateTime, params Product[] products)
         {
+            _productsList = new List<Product>();
             _customer = customer;
-            _product = product;
             _deliveryDateTime = deliveryDateTime;
-            _orderNumb++;
+            foreach (var product in products)
+            {
+                _productsList.Add(product);
+            }
+           
         }
+
+
+        public List<Product> ProductsList
+        {
+            get => _productsList;
+            set => _productsList = value;
+        }
+
 
         public DateTime OrderDateTime => _orderDateTime = DateTime.Now;
 
@@ -26,26 +38,25 @@ namespace CreatingTypesTask
             set => _customer = value;
         }
 
-        public Product Product
-        {
-            get => _product;
-            set => _product = value;
-        }
-
         public DateTime DeliveryDateTime
         {
             get => _deliveryDateTime;
             set => _deliveryDateTime = value;
         }
 
-        public static int OrderNumb => _orderNumb;
-
 
         public override string ToString()
         {
-            return String.Format(Product+Customer.ToString()+
-                                 "Order Date-Time:{0,-20} Delivery Date-Time:{1,-20} OrderNumb:{2,-20}",
-                OrderDateTime,_deliveryDateTime,_orderNumb);
+            string productList = "";
+            int fullCost = 0;
+            foreach (var product in _productsList)
+            {
+                productList += product+"";
+                fullCost += product.ProductPrice;
+            }
+            return String.Format(productList+"full cost: {0} \n"+Customer+
+                                 "Order Date-Time:{1,-20} Delivery Date-Time:{2,-20}",
+                fullCost, OrderDateTime,_deliveryDateTime);
         }
     }
 }

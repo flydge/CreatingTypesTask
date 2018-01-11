@@ -36,8 +36,17 @@ namespace CreatingTypesTask
 
         public override string ToString()
         {
-            return String.Format("Product name: {0,-20} Product price: {1,-20} Product description: {2,-20} \n",
-                _productName,_productPrice,_productDescription);
+            string val;
+            if (_productPrice > 0)
+            {
+                val = String.Format("Product name: {0,-20} Product price: {1,-10} Product description: {2} \n",
+                    _productName, _productPrice, _productDescription);
+            }
+            else
+            {
+                val = "Product not found\n";
+            }
+            return val;
         }
     }
 }
